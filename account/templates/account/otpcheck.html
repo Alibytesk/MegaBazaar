@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Create Account {% endblock %}
+{% block content %}
+        <!-- Login Start -->
+        <div class="login">
+            <div class="container-fluid">
+                <div class='align-content-md-center'>
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="login-form">
+                            <div class="align-content-md-center">
+                            <form method="post">
+                                {% csrf_token %}
+
+                                    {% for field in form %}
+                                        <div class="form-group mb-3">
+
+                                            {{ field }}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div class="text-danger small">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+
+                                <a href="#">login</a> <br />
+
+                            <hr />
+
+                                <div class="col-md-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="newaccount">
+                                        <label class="custom-control-label" for="newaccount">Keep me signed in</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn"> register </button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Login End -->
+{% endblock %}

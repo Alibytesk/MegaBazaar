@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # package
+    'django_render_partial',
+
     #apps
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
-    #package
-    'django_render_partial',
+
 ]
 
 MIDDLEWARE = [
@@ -137,3 +139,7 @@ else:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+]

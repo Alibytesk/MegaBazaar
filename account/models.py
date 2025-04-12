@@ -1,6 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser
 import re
+from datetime import timedelta
+from django.utils import timezone
+
 class UserManager(models.Manager):
     def create_user(self, phone, email=None, password=None, **extra_fields):
         phone = self.normalize_phone(phone)
@@ -71,3 +74,17 @@ class User(AbstractBaseUser):
         return True
     def has_module_perms(self, app_label):
         return True
+
+
+class Otp(models.Model):
+    code = models.SmallIntegerField()
+    token = models.CharField(max_length=255)
+    phone = models.CharField(max_length=11)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @staticmethod
+    def clean_otp():
+        now = timezone.now()
+        five_minutes = now - timedelta(minutes=5)
+
+        Otp.objects.filter(created_at__lte=five_minutes).delete()
