@@ -64,6 +64,7 @@ class User(AbstractBaseUser):
         verbose_name='Phone Number'
     )
     email = models.EmailField(unique=True, max_length=255, null=True, blank=True)
+    is_email_verify = models.BooleanField(default=False)
     full_name = models.CharField(max_length=255, null=True)
     image = models.ImageField(upload_to='users_images', null=True, blank=True)
     USERNAME_FIELD = 'phone'
@@ -74,8 +75,6 @@ class User(AbstractBaseUser):
         return True
     def has_module_perms(self, app_label):
         return True
-
-
 class Otp(models.Model):
     code = models.SmallIntegerField()
     token = models.CharField(max_length=255)
@@ -88,3 +87,7 @@ class Otp(models.Model):
         five_minutes = now - timedelta(minutes=5)
 
         Otp.objects.filter(created_at__lte=five_minutes).delete()
+
+class MailCode(models.Model):
+    user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE, null=True, blank=True)
+    code = models.SmallIntegerField()

@@ -6,6 +6,41 @@ from account.models import User
 from account import validation
 import re
 
+class UserUpdateForm(forms.ModelForm):
+    phone = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}), label='Phone')
+    email = forms.CharField(
+        validators=(validators.EmailValidator,),
+        widget=forms.EmailInput(attrs={'class':'form-control'}),
+        label='Email Address'
+    )
+    image = forms.ImageField(widget=forms.ClearableFileInput(attrs={'class':'form-control'}), label='image', required=False)
+    full_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class':'form-control'}), label='full_name', required=False)
+
+    class Meta:
+        model = User
+        fields = ('phone', 'email', 'full_name', 'image')
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['phone'].disabled = True
+        self.fields['email'].disabled = True
+
+class EmailVerifyForm(forms.ModelForm):
+    email = forms.CharField(
+        validators=(validators.EmailValidator,),
+        widget=forms.EmailInput(attrs={'class':'form-control'}),
+        label='Email Address'
+    )
+    code = forms.CharField(validators=(validators.MaxLengthValidator(6),),
+                           widget=forms.NumberInput(attrs={'placeholder':'code', 'class':'form-control'}),
+                           label='code')
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def __init__(self, *args, **kwargs):
+        super(EmailVerifyForm, self).__init__(*args, **kwargs)
+        self.fields['email'].disabled = True
 
 class UserCreationForm(forms.ModelForm):
     password, confirm_password = forms.CharField(

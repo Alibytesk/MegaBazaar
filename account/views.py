@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
-from account.models import User, Otp
+from account.models import User, Otp, MailCode
 from django.contrib.auth import mixins, authenticate, login, logout
 from django.contrib import messages
-from account.form import LoginForm, RegisterForm, OtpCheckForm, ChangePasswordForm, ForgotPasswordForm, SetPasswordForm
+from account.form import LoginForm, RegisterForm, OtpCheckForm, ChangePasswordForm, ForgotPasswordForm, SetPasswordForm, UserUpdateForm, EmailVerifyForm
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -219,3 +219,63 @@ class SetPasswordView(View):
             return render(request, 'account/change_password.html', context={'form':form})
         else:
             return redirect('account:login')
+
+class UserUpdateView(mixins.LoginRequiredMixin, View):
+
+    def get(self, request):
+        form = UserUpdateForm(instance=request.user)
+        return render(request, 'account/user_update.html', context={'form':form})
+
+    def post(self, request):
+        form = UserUpdateForm(instance=request.user, data=request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+        return render(request, 'account/user_update.html', context={'form':form})
+
+class EmailVerifyGeneratorView(mixins.LoginRequiredMixin, View):
+
+    def get(self, request):
+        if not request.user.is_email_verify:
+            if MailCode.objects.filter(user=request.user).exists():
+                mcode = MailCode.objects.get(user=request.user)
+                mcode.delete()
+            code = randint(122112, 988998)
+            email_subject = 'verify email'
+            message = render_to_string('account/email_verify.html'
+                                       , {
+                                           'user': request.user,
+                                           'code': code,
+                                       })
+            send_email = EmailMessage(email_subject, message, to=[request.user.email])
+            send_email.send()
+            messages.success(request, 'email verification has been sent to your email address')
+            MailCode.objects.create(user=request.user, code=code)
+            return redirect('account:emailverify')
+        else:
+            return redirect('account:user_update')
+
+class EmailVerifyView(mixins.LoginRequiredMixin, View):
+
+    def post(self, request):
+        if MailCode.objects.filter(user=request.user).exists() and not request.user.is_email_verify:
+            form = EmailVerifyForm(instance=request.user, data=request.POST)
+            if form.is_valid():
+                cleaned_data = form.cleaned_data
+                if MailCode.objects.filter(code=cleaned_data['code'], user=request.user).exists():
+                    request.user.is_email_verify = True
+                    request.user.save()
+                    mc = MailCode.objects.get(user=request.user, code=cleaned_data['code'])
+                    mc.delete()
+                    return redirect('account:user_update')
+                else:
+                    form.add_error('code', 'invalid code')
+            return render(request, 'account/otpcheck.html', context={'form':form})
+        else:
+            return redirect('account:user_update')
+
+    def get(self, request):
+        if MailCode.objects.filter(user=request.user).exists() and not request.user.is_email_verify:
+            form = EmailVerifyForm(instance=request.user)
+            return render(request, 'account/otpcheck.html', context={'form':form})
+        else:
+            return redirect('account:user_update')

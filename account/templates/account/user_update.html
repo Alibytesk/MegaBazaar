@@ -1,8 +1,8 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% block title %} Create Account {% endblock %}
+{% block title %} Account | {{ request.user.phone }} {% endblock %}
 {% block content %}
-        <!-- otpcheck Start -->
+        <!-- UserUpdate Start -->
         <div class="login">
             <div class="container-fluid">
                 <div class='align-content-md-center'>
@@ -15,7 +15,18 @@
                                 {% csrf_token %}
                                     {% for field in form %}
                                         <div class="form-group mb-3">
-                                            {{ field }}
+                                            {% if not field.label == 'image' %}
+                                                {{ field.label }}:
+                                                {{ field }}
+                                                {% if field.label == 'Phone' %}
+                                                    <a href="{% url 'account:change_password' %}"> <span class="btn btn-warning">reset password</span> </a>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if field.label == 'Email Address' %}
+                                                {% if not request.user.is_email_verify %}
+                                                    <a href="{% url 'account:ev' %}"> <span class="btn btn-warning">verify email</span> </a>
+                                                {% endif     %}
+                                            {% endif %}
                                             {% if field.errors %}
                                                 {% for error in field.errors %}
                                                     <div class="text-danger small">{{ error }}</div>
@@ -23,19 +34,8 @@
                                             {% endif %}
                                         </div>
                                     {% endfor %}
-                                {% if not request.user.is_authenticated %}
-                                <a href="{% url 'account:login' %}">login</a> <br />
-                                 <hr />
                                 <div class="col-md-12">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="newaccount">
-                                        <label class="custom-control-label" for="newaccount">Keep me signed in</label>
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn"> register </button>
+                                    <button type="submit" class="btn" style="margin-top: 10px"> confirm </button>
                                 </div>
                             </form>
                             </div>
@@ -44,5 +44,5 @@
                 </div>
             </div>
         </div>
-        <!-- otpcheck End -->
+        <!-- UserUpdate End -->
 {% endblock %}
