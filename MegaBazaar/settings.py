@@ -143,3 +143,15 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'account.authentication.EmailAuthBackend',
 ]
+
+# email
+""" 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = 'your_sendgrid_api_key'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+"""
+
+# email local test
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
