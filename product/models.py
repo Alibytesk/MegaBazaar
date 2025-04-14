@@ -92,3 +92,24 @@ class ProductComment(models.Model):
     def __str__(self):
         return f'{self.user.email} -> {self.body[:70]}...'
 
+class Like(models.Model):
+    class Meta:
+        ordering = ('-created_at',)
+    user = models.ForeignKey(
+        User,
+        related_name='likes',
+        blank=True,
+        on_delete=models.CASCADE,
+        verbose_name='user'
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='likes',
+        blank=False,
+        on_delete=models.CASCADE,
+        verbose_name='product'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.phone} {self.user.email} | {self.product.title}"

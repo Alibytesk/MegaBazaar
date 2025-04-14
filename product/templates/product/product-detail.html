@@ -79,9 +79,13 @@
                                             <a class="btn" href="#"><i class="fa fa-shopping-bag"></i>Buy Now</a>
                                         </div>
                                         <div class="ratting">
-                                            <a style="cursor: pointer"><i class="fa fa-heart" style="font-size: 30px; margin-top: 50px"></i> <span style="font-size: 20px">23</span></a>
+                                            {% if is_liked %}
+                                            <a onclick="like('{{ object.slug }}', {{ object.id }})" {% if not request.user.is_authenticated %}href="{% url 'account:login' %}"{% endif %} style="cursor: pointer"><i id="like" class="fa fa-heart" style="font-size: 30px; margin-top: 50px"></i> <span id="counter" style="font-size: 20px">{{ object.likes.all.count }}</span></a>
+                                            {% else %}
+                                            <a onclick="like('{{ object.slug }}', {{ object.id }})" {% if not request.user.is_authenticated %}href="{% url 'account:login' %}"{% endif %}  style="cursor: pointer"><i id="like" class="fa fa-heart-o" style="font-size: 30px; margin-top: 50px"></i> <span id="counter" style="font-size: 20px">{{ object.likes.all.count }}</span></a>
+                                            {% endif %}
                                         </div>
-                                    </div>
+                                    </div> counter
                                 </div>
                             </div>
                         </div>
