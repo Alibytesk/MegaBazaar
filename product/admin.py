@@ -1,5 +1,5 @@
 from django.contrib import admin
-from product.models import Product, Information, ProductComment, ProductImage, Category, Size, Color
+from product.models import Product, Information, ProductComment, ProductImage, Category, Size, Color, Brand
 
 
 class ProductImageAdmin(admin.StackedInline):
@@ -11,6 +11,6 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'discount', 'is_trend')
     inlines = (ProductImageAdmin, InformationAdmin,)
 
-@admin.register(ProductComment, ProductImage, Category, Color, Size)
+@admin.register(ProductComment, ProductImage, Category, Color, Size, Brand)
 class Admin(admin.ModelAdmin):
     pass

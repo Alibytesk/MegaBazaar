@@ -3,6 +3,10 @@ from account.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 
+class Brand(models.Model):
+    title = models.CharField(max_length=50)
+    def __str__(self):
+        return self.title
 class Category(models.Model):
     title = models.CharField(max_length=30)
     def __str__(self):
@@ -21,6 +25,7 @@ class Product(models.Model):
     description =models.TextField()
     price = models.IntegerField()
     discount = models.SmallIntegerField()
+    brand = models.ForeignKey(Brand, related_name='brand', blank=True, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category, related_name='category', blank=True)
     size = models.ManyToManyField(Size, related_name='size', blank=True)
     color = models.ManyToManyField(Color, related_name='color', blank=True)
