@@ -41,10 +41,8 @@
                                                 <div class="dropdown">
                                                     <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}&sort=newest" class="dropdown-item">Newest</a>
-                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}&sort=oldest" class="dropdown-item">Oldest</a>
-
-
+                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ objects.number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}&sort=newest" class="dropdown-item">Newest</a>
+                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ objects.number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}&sort=oldest" class="dropdown-item">Oldest</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -55,7 +53,7 @@
                                                     <div class="dropdown-toggle" data-toggle="dropdown">Product price range</div>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         {% for object in objects2 %}
-                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% endif %}&apricerange={{ object.a_price }}&bpricerange={{ object.b_price }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="dropdown-item">${{ object.a_price }} to ${{ object.b_price }}</a>
+                                                        <a href="{% url 'product:items' %}{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.number }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ objects.number }}{% endif %}&apricerange={{ object.a_price }}&bpricerange={{ object.b_price }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="dropdown-item">${{ object.a_price }} to ${{ object.b_price }}</a>
                                                         {% endfor %}
                                                     </div>
                                                 </div>
@@ -115,23 +113,23 @@
                                             </li>
                                         {% else %}
                                             <li class="page-item">
-                                                <a class="page-link" href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.previous_page_number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.previous_page_number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" tabindex="-1">Previous</a>
+                                                <a class="page-link" href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.previous_page_number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.previous_page_number }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ objects.previous_page_number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" tabindex="-1">Previous</a>
                                             </li>
                                         {% endif %}
                                     {% for i in objects.paginator.page_range %}
                                         {% if objects.number == i %}
                                     <li class="page-item active"><a class="page-link"
-                                        href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ i }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ i }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                                        href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ i }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ i }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ i }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
                                         {{ i }}</a></li>
                                         {% else %}
                                     <li class="page-item"><a class="page-link"
-                                        href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ i }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ i }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                                        href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ i }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ i }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ i }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
                                         {{ i }}</a></li>
                                         {% endif %}
                                     {% endfor %}
                                     {% if objects.has_next %}
                                         <li class="page-item">
-                                            <a class="page-link" href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.next_page_number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.next_page_number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Next</a>
+                                            <a class="page-link" href="{% if request.GET.category %}?category={{ request.GET.category }}&page={{ objects.next_page_number }}{% elif request.GET.brand %}?brand={{ request.GET.brand }}&page={{ objects.next_page_number }}{% elif request.GET.search %}?search={{ request.GET.search }}&page={{ objects.next_page_number }}{% endif %}{% if request.GET.apricerange and request.GET.bpricerange %}&apricerange={{ request.GET.apricerange }}&bpricerange={{ request.GET.bpricerange }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">Next</a>
                                         </li>
                                     {% else %}
                                         <li class="page-item disabled">

@@ -11,8 +11,10 @@
                     </div>
                     <div class="col-md-6">
                         <div class="search">
-                            <input type="text" placeholder="Search">
-                            <button><i class="fa fa-search"></i></button>
+                            <form method="get" action="{% url 'product:items' %}">
+                            <input name="search" type="text" placeholder="Search">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
                         </div>
                     </div>
                     <div class="col-md-3">

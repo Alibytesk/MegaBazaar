@@ -51,6 +51,7 @@ class Product(models.Model):
         self.slug = slugify(self.title)
         super(Product, self).save(*args, **kwargs)
 
+
     def __str__(self):
         return f'{self.title} {self.description[:50]}...'
 
