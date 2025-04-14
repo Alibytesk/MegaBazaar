@@ -7,6 +7,11 @@ class Brand(models.Model):
     title = models.CharField(max_length=50)
     def __str__(self):
         return self.title
+class PriceRange(models.Model):
+    a_price = models.SmallIntegerField()
+    b_price = models.SmallIntegerField()
+    def __str__(self):
+        return f"{self.a_price} to {self.b_price}"
 class Category(models.Model):
     title = models.CharField(max_length=30)
     def __str__(self):
@@ -25,6 +30,7 @@ class Product(models.Model):
     description =models.TextField()
     price = models.IntegerField()
     discount = models.SmallIntegerField()
+    price_range = models.ForeignKey(PriceRange, related_name='pricerange', on_delete=models.CASCADE, null=True, blank=True)
     brand = models.ForeignKey(Brand, related_name='brand', blank=True, on_delete=models.CASCADE, null=True)
     category = models.ManyToManyField(Category, related_name='category', blank=True)
     size = models.ManyToManyField(Size, related_name='size', blank=True)
@@ -84,3 +90,4 @@ class ProductComment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} -> {self.body[:70]}...'
+
