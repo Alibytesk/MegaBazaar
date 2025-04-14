@@ -7,7 +7,7 @@
             <ul class="navbar-nav">
                 {% for i in category_list %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-female"></i>{{ i.title }}</a>
+                    <a class="nav-link" href="{% url 'product:items' %}?category={{ i.title }}"><i class="fa fa-female"></i>{{ i.title }}</a>
                 </li>
                 {% endfor %}
 
@@ -60,7 +60,7 @@
         <h2 class="title">Our Brands</h2>
         <ul>
             {% for i in brand_list %}
-            <li><a href="#"> {{ i.title }} </a><span>({% brand_counter i.id %})</span></li>
+            <li><a href="{% url 'product:items' %}?brand={{ i.title }}"> {{ i.title }} </a><span>({% brand_counter i.id %})</span></li>
             {% endfor %}
         </ul>
     </div>
