@@ -24,6 +24,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category, related_name='category', blank=True)
     size = models.ManyToManyField(Size, related_name='size', blank=True)
     color = models.ManyToManyField(Color, related_name='color', blank=True)
+    is_trend = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -49,6 +50,7 @@ class ProductImage(models.Model):
         on_delete=models.CASCADE,
     )
     image = models.ImageField(upload_to='products_images')
+
 
 class Information(models.Model):
     product = models.ForeignKey(

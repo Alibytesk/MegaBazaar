@@ -1,0 +1,71 @@
+{% load static %}
+<div class="col-lg-4 sidebar">
+    <div class="sidebar-widget category">
+        <h2 class="title">Category</h2>
+        <nav class="navbar bg-light">
+            <ul class="navbar-nav">
+                {% for i in category_list %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-female"></i>{{ i.title }}</a>
+                </li>
+                {% endfor %}
+
+            </ul>
+        </nav>
+    </div>
+
+    <div class="sidebar-widget widget-slider">
+        <div class="sidebar-slider normal-slider">
+            {% for i in trend_women_objects %}
+            <div class="product-item">
+                <div class="product-title">
+                    <a href="{{ i.get_absolute_url }}">{{ i.title }}</a>
+                    <div class="ratting">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </div>
+                </div>
+                <div class="product-image">
+                    <a href="{{ i.get_absolute_url }}">
+                        {% with i.images.all|first as f %}
+                            {% if f %}
+                                <img style="height: 500px" src="{{ f.image.url }}" alt="Product Image">
+                            {% endif %}
+                        {% endwith %}
+                    </a>
+                    <div class="product-action">
+                        <a href="#"><i class="fa fa-cart-plus"></i></a>
+                        <a href="#"><i class="fa fa-heart"></i></a>
+                        <a href="#"><i class="fa fa-search"></i></a>
+                    </div>
+                </div>
+                <div class="product-price">
+                    {% if not i.discount %}
+                    <h3><span>$</span>{{ i.price }}</h3>
+                    {% else %}
+                    <h3><span>$</span>{{ i.discount_price }}</h3>
+                    {% endif %}
+                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="sidebar-widget brands">
+        <h2 class="title">Our Brands</h2>
+        <ul>
+            <li><a href="#">Nulla </a><span>(45)</span></li>
+            <li><a href="#">Curabitur </a><span>(34)</span></li>
+            <li><a href="#">Nunc </a><span>(67)</span></li>
+            <li><a href="#">Ullamcorper</a><span>(74)</span></li>
+            <li><a href="#">Fusce </a><span>(89)</span></li>
+            <li><a href="#">Sagittis</a><span>(28)</span></li>
+        </ul>
+    </div>
+
+
+</div>
