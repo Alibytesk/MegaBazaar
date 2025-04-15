@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} Add Address {% endblock %}
+{% block content %}
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Contact</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- Contact Start -->
+        <div class="contact">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4">
+
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="contact-form">
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                    {% if form.non_field_errors %}
+                                                        {% for error in form.non_field_errors %}
+                                                            <div class="alert alert-danger"> {{ error }} </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    {% for field in form %}
+                                                        <div class="form-group mb-3">
+                                                            {{ field }}
+                                                            {% if field.errors %}
+                                                                {% for error in field.errors %}
+                                                                    <div class="text-danger small">{{ error }}</div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn"> Add Address </button>
+                                                </div>
+                                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Contact End -->
+{% endblock %}

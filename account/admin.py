@@ -1,12 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from account.models import User, Otp, MailCode
+from account.models import User, Otp, MailCode, Address
 from account.form import UserCreationForm, UserChangeForm
 from django.contrib.auth.admin import Group
 admin.site.unregister(Group)
-@admin.register(Otp, MailCode)
+@admin.register(Otp, MailCode, Address)
 class Admin(admin.ModelAdmin):
     pass
+class AddressAdmin(admin.StackedInline):
+    model = Address
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_form, change_form = UserCreationForm, UserChangeForm
@@ -25,3 +27,4 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ordering = ('phone',)
     filter_horizontal = []
+    inlines = (AddressAdmin,)

@@ -158,3 +158,13 @@ class SetPasswordForm(SetPasswordMixin, forms.Form):
 
     def save(self, commit=True):
         return self.set_password_and_save(self.user, "new_password1", commit=commit)
+
+class AddAddressForm(forms.Form):
+    address = forms.CharField(widget=forms.TextInput(attrs={
+        'class':'form-control',
+        'placeholder':'your Address'
+    }))
+    zip_code = forms.CharField(
+        validators=(validators.MaxLengthValidator(10),),
+        widget=forms.NumberInput(attrs={'class':'form-control', 'placeholder':'zip code'})
+    )

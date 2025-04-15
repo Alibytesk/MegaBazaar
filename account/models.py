@@ -91,3 +91,11 @@ class Otp(models.Model):
 class MailCode(models.Model):
     user = models.OneToOneField(User, related_name='user', on_delete=models.CASCADE, null=True, blank=True)
     code = models.SmallIntegerField()
+
+class Address(models.Model):
+    user = models.ForeignKey(User, related_name='user_address', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    zip_code = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.user.phone} {self.user.email} | {self.zip_code} {self.address[:50]}..."

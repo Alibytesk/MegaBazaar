@@ -1,0 +1,137 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} {{ profile }} {% endblock %}
+{% block content %}
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">My Account</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- My Account Start -->
+        <div class="my-account">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="account-nav" data-toggle="pill" href="#account-tab" role="tab"><i class="fa fa-user"></i>Account Details</a>
+                            <a class="nav-link" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab"><i class="fa fa-shopping-bag"></i>Orders</a>
+                            <a class="nav-link" id="address-nav" data-toggle="pill" href="#address-tab" role="tab"><i class="fa fa-map-marker-alt"></i>address</a>
+                            <a class="nav-link" href="{% url 'account:logout' %}"><i class="fa fa-sign-out-alt"></i>Logout</a>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+
+                            <div class="tab-pane fade" id="orders-tab" role="tabpanel" aria-labelledby="orders-nav">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Product</th>
+                                                <th>Date</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Product Name</td>
+                                                <td>01 Jan 2020</td>
+                                                <td>$99</td>
+                                                <td>Approved</td>
+                                                <td><button class="btn">View</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="address-tab" role="tabpanel" aria-labelledby="address-nav">
+                                <h4>Address</h4>
+                                <div class="row">
+                                    {% if not addresses %}
+                                        <!-- start addaddress-->
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                    {% if address_form.non_field_errors %}
+                                                        {% for error in address_form.non_field_errors %}
+                                                            <div class="alert alert-danger"> {{ error }} </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    {% for field in address_form %}
+                                                        <div class="form-group mb-3">
+                                                            {{ field }}
+                                                            {% if field.errors %}
+                                                                {% for error in field.errors %}
+                                                                    <div class="text-danger small">{{ error }}</div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endfor %}
+
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn"> Add Address </button>
+                                                </div>
+                                            </form>
+                                        <!--endaddressadd-->
+                                    {% else %}
+                                        {% for i in addresses %}
+                                        <div class="col-md-6">
+                                            <h5></h5>
+                                            <p>{{ i.address }}</p>
+                                            <p>zip code: {{ i.zip_code }}</p>
+                                            <a href="{% url 'account:delete_address' i.id %}" class="badge badge-danger">Remove</a>
+                                        </div>
+                                        {% endfor %}
+                                        <a href="{% url 'account:add_address' %}?u={{ request.resolver_match.url_name }}" class="btn" style="margin-top: 60px">Add Address</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!--Account Detail -->
+                            <div class="tab-pane fade show active" id="account-tab" role="tabpanel" aria-labelledby="account-nav">
+                                <h4>Account Details</h4>
+                            <form method="post">
+                                {% csrf_token %}
+                                    {% for field in form %}
+                                        <div class="form-group mb-3">
+                                            {% if not field.label == 'image' %}
+                                                {{ field.label }}:
+                                                {{ field }}
+                                                {% if field.label == 'Phone' %}
+                                                    <a href="{% url 'account:change_password' %}"> <span class="btn btn-warning">reset password</span> </a>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if field.label == 'Email Address' %}
+                                                {% if not request.user.is_email_verify %}
+                                                    <a href="{% url 'account:ev' %}"> <span class="btn btn-warning">verify email</span> </a>
+                                                {% endif     %}
+                                            {% endif %}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div class="text-danger small">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn" style="margin-top: 10px"> confirm </button>
+                                </div>
+                            </form>
+                            </div>
+                            <!-- end Account Detail -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- My Account End -->
+{% endblock %}

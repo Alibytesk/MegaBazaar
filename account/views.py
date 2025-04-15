@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
-from account.models import User, Otp, MailCode
+from account.models import User, Otp, MailCode, Address
 from django.contrib.auth import mixins, authenticate, login, logout
 from django.contrib import messages
-from account.form import LoginForm, RegisterForm, OtpCheckForm, ChangePasswordForm, ForgotPasswordForm, SetPasswordForm, UserUpdateForm, EmailVerifyForm
+from account.form import LoginForm, RegisterForm, OtpCheckForm, ChangePasswordForm, ForgotPasswordForm, SetPasswordForm, UserUpdateForm, EmailVerifyForm, AddAddressForm
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -13,6 +13,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.crypto import get_random_string
 from random import randint
+from django.http import Http404
 
 
 class RegisterView(View):
@@ -223,14 +224,19 @@ class SetPasswordView(View):
 class UserUpdateView(mixins.LoginRequiredMixin, View):
 
     def get(self, request):
-        form = UserUpdateForm(instance=request.user)
-        return render(request, 'account/user_update.html', context={'form':form})
+        form, address_form = UserUpdateForm(instance=request.user), AddAddressForm()
+        addresses = Address.objects.filter(user_id=request.user.id)
+        return render(request, 'account/profile.html', context={'form':form, 'addresses':addresses, 'address_form':address_form})
 
     def post(self, request):
-        form = UserUpdateForm(instance=request.user, data=request.POST)
+        form, address_form = UserUpdateForm(instance=request.user, data=request.POST), AddAddressForm(data=request.POST)
         if form.is_valid():
             form.save(commit=True)
-        return render(request, 'account/user_update.html', context={'form':form})
+        if address_form.is_valid():
+            cd = address_form.cleaned_data
+            Address.objects.create(address=cd['address'], user_id=request.user.id, zip_code=cd['zip_code'])
+            return redirect('account:user_update')
+        return render(request, 'account/profile.html', context={'form':form})
 
 class EmailVerifyGeneratorView(mixins.LoginRequiredMixin, View):
 
@@ -279,3 +285,28 @@ class EmailVerifyView(mixins.LoginRequiredMixin, View):
             return render(request, 'account/otpcheck.html', context={'form':form})
         else:
             return redirect('account:user_update')
+
+class AddressDeleteView(mixins.LoginRequiredMixin, View):
+
+    def get(self, request, id):
+        if Address.objects.filter(id=id, user_id=request.user.id).exists():
+            current_address = get_object_or_404(Address, id=id)
+            current_address.delete()
+            return redirect('account:user_update')
+        else:
+            raise Http404('idiot kid! ')
+
+class AddAddressView(mixins.LoginRequiredMixin, View):
+
+    def post(self, request):
+        form = AddAddressForm(data=request.POST)
+        if form.is_valid():
+            Address.objects.create(address=form.cleaned_data['address'], user_id=request.user.id)
+            if request.GET.get('u') == 'user_update':
+                return redirect('account:user_update')
+            else:
+                return redirect('cart:cart')
+
+    def get(self, request):
+        form = AddAddressForm()
+        return render(request, 'account/address.html', context={'form':form})
