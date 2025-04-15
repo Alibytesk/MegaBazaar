@@ -9,72 +9,47 @@
                     <div class="col-md-3">
                         <nav class="navbar bg-light">
                             <ul class="navbar-nav">
+                                {% for i in objects2 %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-home"></i>Home</a>
+                                    <a class="nav-link" href="{% url 'product:items' %}?category={{ i.title }}"><i class="fa fa-tags"></i>{{ i.title }}</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-shopping-bag"></i>Best Selling</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-plus-square"></i>New Arrivals</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-female"></i>Fashion & Beauty</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </nav>
                     </div>
                     <div class="col-md-6">
                         <div class="header-slider normal-slider">
+                            {% for i in objects3 %}
                             <div class="header-slider-item">
-                                <img src="{% static 'img/slider-1.jpg' %}" alt="Slider Image" />
+                                {% with i.images.all|first as f %}
+                                    {% if f %}
+                                    <img src="{{ f.image.url }}" style="height: 600px; width: 400px" alt="Slider Image" />
+                                    {% endif %}
+                                {% endwith %}
                                 <div class="header-slider-caption">
-                                    <p>Some text goes here that describes the image</p>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
+                                    <p>{{ i.title }}</p>
+                                    <a class="btn" href="{{ i.get_absolute_url }}"><i class="fa fa-shopping-cart"></i>Shop Now</a>
                                 </div>
                             </div>
-                            <div class="header-slider-item">
-                                <img src="{% static 'img/slider-2.jpg' %}" alt="Slider Image" />
-                                <div class="header-slider-caption">
-                                    <p>Some text goes here that describes the image</p>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
-                                </div>
-                            </div>
-                            <div class="header-slider-item">
-                                <img src="{% static 'img/slider-3.jpg' %}" alt="Slider Image" />
-                                <div class="header-slider-caption">
-                                    <p>Some text goes here that describes the image</p>
-                                    <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Shop Now</a>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="header-img">
-                            <div class="img-item">
-                                <img src="{% static 'img/category-1.jpg' %}" />
-                                <a class="img-text" href="">
-                                    <p>Some text goes here that describes the image</p>
-                                </a>
-                            </div>
-                            <div class="img-item">
-                                <img src="{% static 'img/category-2.jpg' %}" />
-                                <a class="img-text" href="">
-                                    <p>Some text goes here that describes the image</p>
-                                </a>
-                            </div>
+                            {% for i in objects1 %}
+                            {% if i.is_trend %}
+                                <div class="img-item">
+                                    {% with i.images.all|first as f %}
+                                        {% if f %}
+                                        <img src="{{ f.image.url }}" style="height: 600px; width: 400px" alt="Slider Image" />
+                                        {% endif %}
+                                    {% endwith %}
+                                    <a class="img-text" href="{{ i.get_absolute_url }}">
+                                        <p>{{ i.title }}</p>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -378,6 +353,7 @@
                 <div class="row align-items-center product-slider product-slider-4">
 
                 {% for object in objects1 %}
+                    {% if not object.discount %}
                        <div class="col-lg-3">
                         <div class="product-item">
                             <div class="product-title">
@@ -416,6 +392,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
 
 

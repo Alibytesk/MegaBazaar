@@ -30,3 +30,17 @@ class DeleteFromCartView(View):
         cart = Cart(request)
         cart.delete(id)
         return redirect("cart:cart")
+
+
+class CartCounterView(View):
+    """
+    with django-render-partial
+    includes_template: includes/bottom_bar.html
+    base: base/base.html
+    url_name: cart_counter
+    """
+    def get(self, request):
+        cart = Cart(request)
+        return render(request, 'includes/bottom_bar.html', context={
+            'cart_counter':len(cart.cart)
+        })

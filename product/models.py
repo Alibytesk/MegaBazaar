@@ -36,6 +36,7 @@ class Product(models.Model):
     size = models.ManyToManyField(Size, related_name='size', blank=True)
     color = models.ManyToManyField(Color, related_name='color', blank=True)
     is_trend = models.BooleanField(default=False)
+    is_up = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property

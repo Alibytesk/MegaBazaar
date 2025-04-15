@@ -80,11 +80,15 @@
                                     <div class="cart-summary">
                                         <div class="cart-content">
                                             <h1>Cart Summary</h1>
+                                            {% if not cart.sum_total_price == 7 %}
                                             <p>delivery<span>$7</span></p>
                                             <h2>Grand Total<span>${{ cart.sum_total_price }}</span></h2>
+                                            {% else %}
+                                            <p>delivery<span>$0</span></p>
+                                            <h2>Grand Total<span>$0</span></h2>
+                                            {% endif %}
                                         </div>
                                         <div class="cart-btn">
-                                            <button>Update Cart</button>
                                             <button>Checkout</button>
                                         </div>
                                     </div>

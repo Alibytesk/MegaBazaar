@@ -1,4 +1,5 @@
 {% load static %}
+{% load render_partial %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,7 +17,7 @@
         <!-- Nav Bar End -->
 
         <!-- Bottom Bar Start -->
-        {% include 'includes/bottom_bar.html' %}
+        {% render_partial 'cart:cart_counter' %}
         <!-- Bottom Bar End -->
     {% block content %}
 

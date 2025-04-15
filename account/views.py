@@ -301,7 +301,11 @@ class AddAddressView(mixins.LoginRequiredMixin, View):
     def post(self, request):
         form = AddAddressForm(data=request.POST)
         if form.is_valid():
-            Address.objects.create(address=form.cleaned_data['address'], user_id=request.user.id)
+            Address.objects.create(
+                address=form.cleaned_data['address'],
+                user_id=request.user.id,
+                zip_code=form.cleaned_data['zip_code']
+            )
             if request.GET.get('u') == 'user_update':
                 return redirect('account:user_update')
             else:
