@@ -3,6 +3,9 @@ from product import models
 
 class Cart:
 
+    def __new__(cls, *args, **kwargs):
+        return super(Cart, cls).__new__(cls)
+
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get('cart')
@@ -44,8 +47,11 @@ class Cart:
             del self.cart[id]
             self.save()
 
-    def total(self):
-        pass
+    def sum_total_price(self):
+        total = int()
+        for i in self:
+            total += i['per_total_price']
+        return round(total, 2) + 7
 
     def _unique_id_generator(self, id, color, size):
         return f"{id}{color}{size}"
