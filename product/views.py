@@ -38,7 +38,7 @@ def products_list(request):
         else:
             products = Product.objects.filter(brand__title__icontains=request.GET.get('brand'))
 
-    if request.GET.get('search'):
+    elif request.GET.get('search'):
         if request.GET.get('apricerange') and request.GET.get('bpricerange'):
             products = Product.objects.filter(
                 title__icontains=request.GET.get('search'),

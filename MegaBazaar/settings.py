@@ -39,12 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # package
     'django_render_partial',
-
     #apps
     'home.apps.HomeConfig',
     'account.apps.AccountConfig',
     'product.apps.ProductConfig',
-
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,98 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} {{ request.resolver_match.url_name|title }} {% endblock %}
+{% block content %}
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Cart</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+
+
+        
+        <!-- Cart Start -->
+        <div class="cart-page">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="cart-page-inner">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>discount</th>
+                                            <th>Total Price</th>
+                                            <th>Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                    {% for i in cart %}
+                                        <tr>
+                                            <td>
+                                                <div class="img">
+                                                    {% with i.product.images.all|first as f %}
+                                                        {% if f %}
+                                                        <a href="{% url 'product:detail' i.product.slug %}"><img src="{{ f.image.url }}" alt="Image"></a>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                    <p>{{ i.product.title }}</p>
+                                                </div>
+                                            </td>
+                                            <td>${{ i.price }}</td>
+                                            <td>
+                                                {{ i.quantity }}
+                                            </td>
+                                            <td>${{ i.total }}</td>
+                                            <td>%{{ i.discount }}</td>
+                                            <td>${{ i.per_total_price }}</td>
+                                            <td><a href="{% url 'cart:delete' i.uniqueid %}"><i class="fa fa-trash"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="cart-page-inner">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="coupon">
+                                        <input type="text" placeholder="Coupon Code">
+                                        <button>Apply Code</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="cart-summary">
+                                        <div class="cart-content">
+                                            <h1>Cart Summary</h1>
+                                            <p>Sub Total<span>$99</span></p>
+                                            <p>Shipping Cost<span>$1</span></p>
+                                            <h2>Grand Total<span>$100</span></h2>
+                                        </div>
+                                        <div class="cart-btn">
+                                            <button>Update Cart</button>
+                                            <button>Checkout</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cart End -->
+    <script>
+
+{% endblock %}
