@@ -13,9 +13,6 @@
             </div>
         </div>
         <!-- Breadcrumb End -->
-
-
-        
         <!-- Cart Start -->
         <div class="cart-page">
             <div class="container-fluid">
@@ -71,10 +68,13 @@
                         <div class="cart-page-inner">
                             <div class="row">
                                 <div class="col-md-12">
+                                    <form method="post" action="{% url 'cart:applycoupon' %}">
+                                        {% csrf_token %}
                                     <div class="coupon">
-                                        <input type="text" placeholder="Coupon Code">
-                                        <button>Apply Code</button>
+                                        <input name="code" type="text" placeholder="Coupon Code">
+                                        <button type="submit">Apply Code</button>
                                     </div>
+                                    </form>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="cart-summary">
@@ -82,7 +82,7 @@
                                             <h1>Cart Summary</h1>
                                             {% if not cart.sum_total_price == 7 %}
                                             <p>delivery<span>$7</span></p>
-                                            <h2>Grand Total<span>${{ cart.sum_total_price }}</span></h2>
+                                            <h2>Grand Total<span>${{ cart.get_total_price_after_discount }}</span></h2>
                                             {% else %}
                                             <p>delivery<span>$0</span></p>
                                             <h2>Grand Total<span>$0</span></h2>
