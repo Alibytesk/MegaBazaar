@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
+from django.http import Http404
 from django.contrib.auth import mixins
-from cart.models import Cart
+from django.utils.crypto import get_random_string
+from django.urls import reverse
+from account.models import Address
+from cart.models import Cart, Order, OrderObject
 from django.contrib import messages
 from product.models import Product
-
 
 class CartView(View):
     template_name = 'cart/cart.html'
@@ -42,6 +45,32 @@ class DeleteFromCartView(View):
         cart = Cart(request)
         cart.delete(id)
         return redirect("cart:cart")
+
+class OrderDetailView(mixins.LoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        if Order.objects.filter(token=request.GET.get('token'), user_id=request.user.id).exists():
+            order = get_object_or_404(Order, pk=pk)
+            return render(request, 'cart/checkout.html', context={'order':order})
+        else:
+            raise Http404('go fuck yourself kid')
+
+class OrderCreationView(mixins.LoginRequiredMixin, View):
+
+    def get(self, request):
+        cart, token = Cart(request), get_random_string(length=255)
+        order = Order.objects.create(user=request.user, pay_price=cart.get_total_price_after_discount(), token=token)
+        for item in cart:
+            OrderObject.objects.create(
+                order=order,
+                product=item['product'],
+                price=item['price'],
+                quantity=item['quantity'],
+                color=item['color'],
+                size=item['size']
+            )
+        cart.remove_cart()
+        return redirect(reverse('cart:order_detail', kwargs={'pk':order.pk}) + f"?token={token}")
 
 class CartCounterView(View):
     """

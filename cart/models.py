@@ -1,4 +1,5 @@
 from django.db import models
+from account.models import User, Address
 from product import models as BaseProductModels
 from django.utils import timezone
 
@@ -65,6 +66,9 @@ class Cart:
                 pass
         return 0
 
+    def remove_cart(self):
+        del self.session['cart']
+
     def delete(self, id):
         if id in self.cart:
             del self.cart[id]
@@ -84,6 +88,7 @@ class Cart:
 
 
 class CouponCode(models.Model):
+
     code = models.CharField(max_length=20, unique=True)
     discount = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
@@ -96,3 +101,27 @@ class CouponCode(models.Model):
 
     def __str__(self):
         return f"{self.code} | {self.discount}"
+
+class Order(models.Model):
+
+    is_paid = models.BooleanField(default=False)
+    pay_price = models.FloatField(default=0)
+    user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE, null=False, blank=False)
+    address = models.ForeignKey(Address, related_name='orders', on_delete=models.CASCADE, null=True, blank=True)
+    token = models.CharField(max_length=255, blank=False, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user}"
+
+class OrderObject(models.Model):
+
+    order = models.ForeignKey(Order, related_name='orderobjects', on_delete=models.CASCADE)
+    product = models.ForeignKey(BaseProductModels.Product, on_delete=models.CASCADE, related_name='orderobjects')
+    price = models.IntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+    size = models.CharField(max_length=10, blank=True, null=True)
+    color = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.product.title

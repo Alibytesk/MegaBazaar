@@ -89,7 +89,11 @@
                                             {% endif %}
                                         </div>
                                         <div class="cart-btn">
-                                            <button>Checkout</button>
+                                            {% if not request.user.is_authenticated %}
+                                            <a class="btn" href="{% url 'account:login' %}">Checkout</a>
+                                            {% else %}
+                                            <a class="btn" href="{% url 'cart:order_create' %}">Checkout</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
