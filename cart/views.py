@@ -8,6 +8,7 @@ from account.models import Address
 from cart.models import Cart, Order, OrderObject
 from django.contrib import messages
 from product.models import Product
+from .form import *
 
 class CartView(View):
     template_name = 'cart/cart.html'
@@ -51,7 +52,10 @@ class OrderDetailView(mixins.LoginRequiredMixin, View):
     def get(self, request, pk):
         if Order.objects.filter(token=request.GET.get('token'), user_id=request.user.id).exists():
             order = get_object_or_404(Order, pk=pk)
-            return render(request, 'cart/checkout.html', context={'order':order})
+            addresses = request.user.addresses.all()
+            form = AddressSelectionForm(user=request.user)
+            user_form = OrderProfileForm(instance=request.user)
+            return render(request, 'cart/checkout.html', context={'order':order, "form":form, 'addresses':addresses, 'user_form':user_form})
         else:
             raise Http404('go fuck yourself kid')
 

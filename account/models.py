@@ -93,9 +93,9 @@ class MailCode(models.Model):
     code = models.SmallIntegerField()
 
 class Address(models.Model):
-    user = models.ForeignKey(User, related_name='user_address', on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE, null=True, blank=True)
     address = models.TextField()
     zip_code = models.CharField(max_length=10)
 
     def __str__(self):
-        return f"{self.user.phone} {self.user.email} | {self.zip_code} {self.address[:50]}..."
+        return f"zip-code:{self.zip_code} Address:{self.address[:50]}..."

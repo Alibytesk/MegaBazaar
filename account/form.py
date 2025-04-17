@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, SetPasswordMixin
 from django.core.exceptions import ValidationError
 from django.core import validators
-from account.models import User
+from account.models import User, Address
 from account import validation
 import re
 
