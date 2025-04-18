@@ -101,6 +101,8 @@ class LoginView(View):
                 if user is not None:
                     login(request, user)
                     messages.success(request, "you are now logged in")
+                    if request.GET.get('u'):
+                        return redirect('cart:cart')
                     return redirect('home:home')
                 else:
                     form.add_error('username', 'Incorrect phone, email, password')
